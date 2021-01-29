@@ -2,37 +2,18 @@ package com.asvetenco.intervaltimer
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material.Text
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.setContent
-import androidx.compose.ui.tooling.preview.Preview
-import com.asvetenco.intervaltimer.ui.theme.IntervalTimerTheme
+import com.asvetenco.intervaltimer.screen.dashboard.DashboardFragment
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            IntervalTimerTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(color = MaterialTheme.colors.background) {
-                    Greeting("Android")
-                }
-            }
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction().replace(
+                    R.id.host_fragment,
+                    DashboardFragment.newInstance(),
+                    DashboardFragment::class.java.simpleName
+                ).commit()
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    IntervalTimerTheme {
-        Greeting("Android")
     }
 }
