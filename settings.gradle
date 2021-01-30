@@ -1,2 +1,2 @@
 rootProject.name = "IntervalTimer"
-include ':app'
+include ':app', ':database'
