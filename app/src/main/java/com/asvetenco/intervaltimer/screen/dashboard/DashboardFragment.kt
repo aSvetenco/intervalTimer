@@ -5,27 +5,34 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import com.asvetenco.database.WorkoutProvider
-import com.asvetenco.database.domain.Workout
 import com.asvetenco.intervaltimer.R
+import com.asvetenco.intervaltimer.countdown.Workout
+import com.asvetenco.intervaltimer.screen.setup.SetupTimerFragment
 import com.asvetenco.intervaltimer.ui.theme.IntervalTimerTheme
 import com.asvetenco.intervaltimer.ui.theme.purple500
+import com.asvetenco.intervaltimer.ui.theme.purple700
 
 class DashboardFragment : Fragment() {
-
 
     private lateinit var viewModel: DashboardViewModel
 
@@ -35,7 +42,7 @@ class DashboardFragment : Fragment() {
         viewModel = DashboardViewModel(client)
         viewModel.retrieveWorkouts()
     }
-    
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -64,7 +71,7 @@ class DashboardFragment : Fragment() {
     @Composable
     fun AppToolbar() {
         TopAppBar(
-            title = { Text(text = getString(R.string.app_name)) },
+            title = { Text(text = stringResource(R.string.app_name)) },
             actions = {
                 IconButton(onClick = { /*TODO*/ }) {
                     Icon(
@@ -96,21 +103,25 @@ class DashboardFragment : Fragment() {
             modifier = modifier.padding(16.dp)
         ) {
             items(workouts) {
-                ItemExistingTimer(name = "Timer ${it.title}")
+                ItemExistingTimer(it)
             }
-
         }
     }
 
     @Composable
-    fun ItemExistingTimer(name: String) {
-        Column(modifier = Modifier.padding(16.dp)) {
+    fun ItemExistingTimer(workout: Workout) {
+        Column(
+            modifier = Modifier
+                .background(Color.Gray)
+                .clickable(onClick = { showSetUpFragment(workout) }),
+            verticalArrangement = Arrangement.Center,
+        ) {
             Row {
                 Icon(
                     imageVector = vectorResource(id = R.drawable.ic_baseline_sports_24),
-                    tint = Color.Magenta
+                    tint = purple700
                 )
-                Text(text = name)
+                Text(text = workout.title)
             }
             Divider()
         }
@@ -133,6 +144,14 @@ class DashboardFragment : Fragment() {
 
     private fun fillDb() {
         viewModel.fillDb()
+    }
+
+    private fun showSetUpFragment(workout: Workout?) {
+        parentFragmentManager.beginTransaction().replace(
+            R.id.host_fragment,
+            SetupTimerFragment.newInstance(workout?.title, workout?.id),
+            SetupTimerFragment::class.java.simpleName
+        ).commit()
     }
 
     companion object {

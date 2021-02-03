@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">IntervalTimer</string>
+
+    <!--Set up Timer-->
+    <string name="set_up_timer_add_new_timer">Add new timer</string>
+    <string name="set_up_timer_warm_up">Warm up</string>
+    <string name="set_up_timer_cool_down">Cool down</string>
+    <string name="set_up_timer_work">Work</string>
+    <string name="set_up_timer_rest">Rest</string>
+    <string name="set_up_timer_intervals">Intervals</string>
+
+
+
 </resources>

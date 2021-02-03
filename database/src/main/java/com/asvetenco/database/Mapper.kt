@@ -1,6 +1,6 @@
 package com.asvetenco.database
 
-interface Mapper<Domain, Dto> {
-    fun mapToDto(domain: Domain): Dto
-    fun mapFromDto(dto: Dto): Domain
+interface Mapper<Entity, Dto> {
+    fun mapFromEntity(entity: Entity): Dto
+    fun mapToEntity(dto: Dto): Entity
 }

@@ -5,10 +5,9 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.asvetenco.database.dao.WorkoutDao
-import com.asvetenco.database.entity.LapEntity
-import com.asvetenco.database.entity.TimerEntity
+import com.asvetenco.database.entity.WorkoutEntity
 
-@Database(entities = [TimerEntity::class, LapEntity::class], version = 1, exportSchema = false)
+@Database(entities = [WorkoutEntity::class], version = 3, exportSchema = false)
 internal abstract class IntervalTimerDatabase : RoomDatabase() {
 
     abstract fun workoutDao(): WorkoutDao
