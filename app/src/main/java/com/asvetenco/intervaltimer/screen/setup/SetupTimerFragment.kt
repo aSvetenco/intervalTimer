@@ -5,16 +5,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
@@ -27,7 +26,9 @@ import com.asvetenco.database.WorkoutProvider
 import com.asvetenco.intervaltimer.R
 import com.asvetenco.intervaltimer.countdown.TimeEvent
 import com.asvetenco.intervaltimer.countdown.Workout
+import com.asvetenco.intervaltimer.ui.components.AppToolbar
 import com.asvetenco.intervaltimer.ui.theme.IntervalTimerTheme
+import com.asvetenco.intervaltimer.ui.theme.purple50
 
 class SetupTimerFragment : Fragment() {
 
@@ -73,39 +74,32 @@ class SetupTimerFragment : Fragment() {
     @Composable
     fun SetupContent() {
         IntervalTimerTheme {
-            Surface(color = Color(-0x100)) {
+            Surface(color = purple50) {
                 Scaffold(
-                    topBar = { AppToolbar() },
+                    topBar = {
+                        AppToolbar(
+                            timerTitle ?: stringResource(id = R.string.set_up_timer_create_timer),
+                            R.drawable.ic_baseline_save_24
+                        )
+                    }
                 ) { innerPadding -> SetUpTimer(Modifier.padding(innerPadding)) }
             }
         }
     }
 
     @Composable
-    fun AppToolbar() {
-        TopAppBar(
-            title = { Text(text = timerTitle ?: stringResource(R.string.app_name)) },
-            actions = {
-                IconButton(onClick = { /*TODO*/ }) {
-                    Icon(
-                        imageVector = vectorResource(id = R.drawable.ic_baseline_settings_24),
-                        tint = Color.White
-                    )
-                }
-            }
-        )
-    }
-
-    @Composable
     fun SetUpTimer(modifier: Modifier) {
         val workout = viewModel.workout.collectAsState()
 
-        Column(
+        LazyColumn(
             modifier = modifier.padding(16.dp)
         ) {
-            workout.value.events.forEach { ItemSetUp(it, workout.value) }
+            items(workout.value.events) {
+                ItemSetUp(it, workout.value)
+            }
         }
     }
+
 
     @Composable
     fun ItemSetUp(event: TimeEvent, workout: Workout) {
