@@ -17,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -28,8 +27,10 @@ import com.asvetenco.database.WorkoutProvider
 import com.asvetenco.intervaltimer.R
 import com.asvetenco.intervaltimer.countdown.Workout
 import com.asvetenco.intervaltimer.screen.setup.SetupTimerFragment
+import com.asvetenco.intervaltimer.ui.components.AppToolbar
 import com.asvetenco.intervaltimer.ui.theme.IntervalTimerTheme
-import com.asvetenco.intervaltimer.ui.theme.purple500
+import com.asvetenco.intervaltimer.ui.theme.purple100
+import com.asvetenco.intervaltimer.ui.theme.purple50
 import com.asvetenco.intervaltimer.ui.theme.purple700
 
 class DashboardFragment : Fragment() {
@@ -61,46 +62,25 @@ class DashboardFragment : Fragment() {
     @Composable
     fun Content(workouts: List<Workout>) {
         Scaffold(
-            topBar = { AppToolbar() },
-            floatingActionButton = { FloatingButton() }
+            backgroundColor = purple50,
+            topBar = {
+                AppToolbar(
+                    stringResource(id = R.string.app_name),
+                    R.drawable.ic_baseline_add_24
+                ) {
+                    showSetUpFragment()
+                }
+            }
         ) { innerPadding ->
             TimerList(Modifier.padding(innerPadding), workouts)
         }
     }
 
     @Composable
-    fun AppToolbar() {
-        TopAppBar(
-            title = { Text(text = stringResource(R.string.app_name)) },
-            actions = {
-                IconButton(onClick = { /*TODO*/ }) {
-                    Icon(
-                        imageVector = vectorResource(id = R.drawable.ic_baseline_settings_24),
-                        tint = Color.White
-                    )
-                }
-            }
-        )
-    }
-
-    @Composable
-    fun FloatingButton() {
-        FloatingActionButton(
-            onClick = ::fillDb,
-            backgroundColor = purple500,
-            content = {
-                Icon(
-                    imageVector = vectorResource(id = R.drawable.ic_baseline_add_24),
-                    tint = Color.White
-                )
-            }
-        )
-    }
-
-    @Composable
     fun TimerList(modifier: Modifier, workouts: List<Workout>) {
         LazyColumn(
-            modifier = modifier.padding(16.dp)
+            modifier = modifier
+                .background(purple50)
         ) {
             items(workouts) {
                 ItemExistingTimer(it)
@@ -112,46 +92,65 @@ class DashboardFragment : Fragment() {
     fun ItemExistingTimer(workout: Workout) {
         Column(
             modifier = Modifier
-                .background(Color.Gray)
                 .clickable(onClick = { showSetUpFragment(workout) }),
             verticalArrangement = Arrangement.Center,
         ) {
-            Row {
+            Row(Modifier.padding(top = 16.dp, bottom = 16.dp, end = 8.dp, start = 8.dp)) {
                 Icon(
+                    modifier = Modifier.padding(start = 16.dp),
                     imageVector = vectorResource(id = R.drawable.ic_baseline_sports_24),
                     tint = purple700
                 )
-                Text(text = workout.title)
+                Text(
+                    modifier = Modifier
+                        .padding(start = 16.dp)
+                        .weight(1f),
+                    text = workout.title
+                )
+                Icon(
+                    modifier = Modifier
+                        .padding(end = 16.dp)
+                        .clickable(onClick = { showSetUpFragment(workout) }),
+                    imageVector = vectorResource(id = R.drawable.ic_baseline_edit_24),
+                    tint = purple700
+                )
             }
-            Divider()
+            Divider(
+                Modifier.padding(start = 8.dp, end = 8.dp),
+                purple100
+            )
         }
     }
 
     @Composable
     fun Dashboard(workouts: List<Workout>) {
         IntervalTimerTheme {
-            Surface(color = Color(-0x100)) {
-                Content(workouts)
-            }
+            Surface { Content(workouts) }
         }
     }
 
     @Preview(showBackground = true)
     @Composable
     fun DefaultPreview() {
-        Dashboard(listOf())
+        Dashboard(
+            listOf(
+                Workout(title = "Tabata"),
+                Workout(title = "Round"),
+                Workout(title = "Heavy"),
+            )
+        )
     }
 
-    private fun fillDb() {
-        viewModel.fillDb()
-    }
-
-    private fun showSetUpFragment(workout: Workout?) {
-        parentFragmentManager.beginTransaction().replace(
-            R.id.host_fragment,
-            SetupTimerFragment.newInstance(workout?.title, workout?.id),
-            SetupTimerFragment::class.java.simpleName
-        ).commit()
+    private fun showSetUpFragment(workout: Workout? = null) {
+        parentFragmentManager.beginTransaction().apply {
+            replace(
+                R.id.host_fragment,
+                SetupTimerFragment.newInstance(workout?.title, workout?.id),
+                SetupTimerFragment::class.java.simpleName
+            )
+            addToBackStack(SetupTimerFragment::class.java.simpleName)
+            commit()
+        }
     }
 
     companion object {

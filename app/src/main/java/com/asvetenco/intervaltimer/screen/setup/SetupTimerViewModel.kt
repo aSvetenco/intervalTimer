@@ -1,6 +1,7 @@
 package com.asvetenco.intervaltimer.screen.setup
 
 import com.asvetenco.database.client.LocalTimerClient
+import com.asvetenco.database.client.RoomNotFoundException
 import com.asvetenco.intervaltimer.base.BaseViewModel
 import com.asvetenco.intervaltimer.countdown.TimeEvent
 import com.asvetenco.intervaltimer.countdown.Workout
@@ -15,9 +16,15 @@ class SetupTimerViewModel(private val client: LocalTimerClient) : BaseViewModel(
 
     fun retrieveTimerById(id: Long?) {
         if (id != null) {
-            launchDataLoad {
-                client.getWorkoutById(id).collect { workoutDto ->
-                    workout.value =     Workout(
+            launchDataLoad(
+                doOnError = {
+                    if (it is RoomNotFoundException) {
+                        workout.value = Workout.empty()
+                    }
+                },
+                block = {
+                    client.getWorkoutById(id).collect { workoutDto ->
+                        workout.value = Workout(
                             workoutDto.id,
                             workoutDto.title,
                             workoutDto.lapsCount,
@@ -28,8 +35,10 @@ class SetupTimerViewModel(private val client: LocalTimerClient) : BaseViewModel(
                                 TimeEvent("Rest", workoutDto.lap.rest, "Rest")
                             )
                         )
-                }
-            }
+                    }
+                })
+        } else {
+            workout.value = Workout.empty()
         }
     }
 
