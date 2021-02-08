@@ -4,12 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.asvetenco.database.client.LocalTimerClient
 import com.asvetenco.intervaltimer.base.BaseViewModel
+import com.asvetenco.intervaltimer.data.TimeEventMapper
 import com.asvetenco.intervaltimer.screen.dashboard.DashboardViewModel
 import com.asvetenco.intervaltimer.screen.setup.SetupTimerViewModel
-import java.util.*
 
 class SetupViewModelFactory(
-    private val dataSource: LocalTimerClient
+    private val dataSource: LocalTimerClient,
+    private val mapper: TimeEventMapper,
 ) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
@@ -17,7 +18,7 @@ class SetupViewModelFactory(
         if (modelClass != BaseViewModel::class.java) {
             throw IllegalArgumentException("Unknown ViewModel class")
         }
-        return SetupTimerViewModel(dataSource) as T
+        return SetupTimerViewModel(dataSource, mapper) as T
     }
 }
 
