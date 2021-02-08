@@ -4,7 +4,7 @@ import com.asvetenco.database.client.LocalTimerClient
 import com.asvetenco.database.dto.LapDto
 import com.asvetenco.database.dto.WorkoutDto
 import com.asvetenco.intervaltimer.base.BaseViewModel
-import com.asvetenco.intervaltimer.countdown.Workout
+import com.asvetenco.intervaltimer.data.Workout
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlin.random.Random
@@ -23,6 +23,7 @@ class DashboardViewModel(private val client: LocalTimerClient) : BaseViewModel()
                         workoutDto.id,
                         workoutDto.title,
                         workoutDto.lapsCount,
+                        workoutDto.lap.id,
                         listOf()
                     )
                 }

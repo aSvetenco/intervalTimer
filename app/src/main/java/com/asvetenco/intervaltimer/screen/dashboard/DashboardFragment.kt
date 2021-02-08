@@ -25,8 +25,9 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import com.asvetenco.database.WorkoutProvider
 import com.asvetenco.intervaltimer.R
-import com.asvetenco.intervaltimer.countdown.Workout
+import com.asvetenco.intervaltimer.data.Workout
 import com.asvetenco.intervaltimer.screen.setup.SetupTimerFragment
+import com.asvetenco.intervaltimer.screen.timer.IntervalTimerFragment
 import com.asvetenco.intervaltimer.ui.components.AppToolbar
 import com.asvetenco.intervaltimer.ui.theme.IntervalTimerTheme
 import com.asvetenco.intervaltimer.ui.theme.purple100
@@ -92,7 +93,7 @@ class DashboardFragment : Fragment() {
     fun ItemExistingTimer(workout: Workout) {
         Column(
             modifier = Modifier
-                .clickable(onClick = { showSetUpFragment(workout) }),
+                .clickable(onClick = { showTimerFragment(workout) }),
             verticalArrangement = Arrangement.Center,
         ) {
             Row(Modifier.padding(top = 16.dp, bottom = 16.dp, end = 8.dp, start = 8.dp)) {
@@ -149,6 +150,18 @@ class DashboardFragment : Fragment() {
                 SetupTimerFragment::class.java.simpleName
             )
             addToBackStack(SetupTimerFragment::class.java.simpleName)
+            commit()
+        }
+    }
+
+    private fun showTimerFragment(workout: Workout? = null) {
+        parentFragmentManager.beginTransaction().apply {
+            replace(
+                R.id.host_fragment,
+                IntervalTimerFragment.newInstance(workout?.id),
+                IntervalTimerFragment::class.java.simpleName
+            )
+            addToBackStack(IntervalTimerFragment::class.java.simpleName)
             commit()
         }
     }

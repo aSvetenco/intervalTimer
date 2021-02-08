@@ -7,6 +7,7 @@
     <string name="set_up_timer_cool_down">Cool down</string>
     <string name="set_up_timer_work">Work</string>
     <string name="set_up_timer_rest">Rest</string>
+    <string name="set_up_timer_exercises">Exercises</string>
     <string name="set_up_timer_intervals">Intervals</string>
     <string name="set_up_timer_create_timer">Create Timer</string>
 
