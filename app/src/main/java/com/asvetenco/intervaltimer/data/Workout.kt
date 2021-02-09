@@ -52,6 +52,9 @@ sealed class TimeEvent(
 
         fun exercises(time: Int = 0) =
             Exercise(R.string.set_up_timer_exercises, time, R.string.set_up_timer_exercises)
+
+        fun congrats(time: Int = 0) =
+            Exercise(R.string.set_up_timer_congrats, time, R.string.set_up_timer_congrats)
     }
 }
 
@@ -114,6 +117,19 @@ data class Exercise(
 ) : TimeEvent(title, time, phrase) {
 
     override fun eventCopy(title: Int, time: Int, phrase: Int): Exercise = copy(
+        title = title,
+        time = time,
+        phrase = phrase
+    )
+}
+
+data class Congrats(
+    override val title: Int,
+    override val time: Int,
+    override val phrase: Int
+) : TimeEvent(title, time, phrase) {
+
+    override fun eventCopy(title: Int, time: Int, phrase: Int): Congrats = copy(
         title = title,
         time = time,
         phrase = phrase

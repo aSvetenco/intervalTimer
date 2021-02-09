@@ -32,6 +32,9 @@ class TimeEventMapper {
                 is Work -> interim.work = it.time
                 is Rest -> interim.rest = it.time
                 is Exercise -> interim.exercise = it.time
+                is Congrats -> {
+                    //do nothing
+                }
             }
         }
 
