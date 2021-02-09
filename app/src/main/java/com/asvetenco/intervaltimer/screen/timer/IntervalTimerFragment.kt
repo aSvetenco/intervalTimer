@@ -13,19 +13,24 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.asvetenco.database.WorkoutProvider
 import com.asvetenco.intervaltimer.R
+import com.asvetenco.intervaltimer.countdown.CountdownService
 import com.asvetenco.intervaltimer.countdown.CountdownTimer
 import com.asvetenco.intervaltimer.data.TimeEventMapper
 import com.asvetenco.intervaltimer.ui.theme.IntervalTimerTheme
@@ -47,8 +52,9 @@ class IntervalTimerFragment : Fragment() {
         viewModel = IntervalTimerViewModel(
             WorkoutProvider(context.applicationContext).localTimerClient(),
             TimeEventMapper(),
-            CountdownTimer()
+            CountdownService(CountdownTimer(), lifecycleScope)
         )
+        viewModel.retrieveTimerById(workoutId)
     }
 
     override fun onCreateView(
@@ -74,6 +80,10 @@ class IntervalTimerFragment : Fragment() {
 
     @Composable
     fun Content() {
+
+        val event = viewModel.eventTitle.collectAsState()
+        val onTick = viewModel.remainingTime.collectAsState()
+
         ConstraintLayout(
             modifier = Modifier
                 .background(purple50)
@@ -84,15 +94,15 @@ class IntervalTimerFragment : Fragment() {
                 vectorResource(id = R.drawable.ic_baseline_cancel_24),
                 tint = purple700,
                 modifier = Modifier
-                    .clickable(onClick = {})
+                    .clickable(onClick = { viewModel.pauseWorkout() })
                     .padding(16.dp)
                     .constrainAs(closeIcon) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                }
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                    }
             )
             Text(
-                text = "0",
+                text = onTick.value.toString(),
                 fontSize = 96.sp,
                 modifier = Modifier.constrainAs(timer) {
                     top.linkTo(parent.top)
@@ -101,7 +111,7 @@ class IntervalTimerFragment : Fragment() {
                     end.linkTo(parent.end)
                 }
             )
-            Text(text = "Get Ready",
+            Text(text = stringResource(id = event.value.title),
                 fontSize = 32.sp,
                 modifier = Modifier.constrainAs(hint) {
                     top.linkTo(timer.bottom)
@@ -112,11 +122,11 @@ class IntervalTimerFragment : Fragment() {
             Controls(
                 Modifier
                     .constrainAs(controls) {
-                    top.linkTo(hint.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
-                }
+                        top.linkTo(hint.bottom)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        bottom.linkTo(parent.bottom)
+                    }
             )
         }
     }
@@ -129,13 +139,19 @@ class IntervalTimerFragment : Fragment() {
         ) {
             InteractiveIcon(R.drawable.ic_baseline_replay_5_24, Modifier.weight(1f)) {}
             InteractiveIcon(R.drawable.ic_baseline_fast_rewind_24, Modifier.weight(1f)) {}
-            Icon(
-                vectorResource(id = R.drawable.ic_baseline_play_arrow_24),
+            IconButton(
+                { viewModel.startWorkout() },
                 Modifier.weight(2f),
-                tint = purple700
-            )
+            ) {
+                Icon(
+                    vectorResource(id = R.drawable.ic_baseline_play_arrow_24),
+                    tint = purple700
+                )
+            }
             InteractiveIcon(R.drawable.ic_baseline_fast_forward_24, Modifier.weight(1f)) {}
-            InteractiveIcon(R.drawable.ic_baseline_volume_up_24, Modifier.weight(1f)) {}
+            InteractiveIcon(R.drawable.ic_baseline_volume_up_24, Modifier.weight(1f)) {
+
+            }
         }
     }
 
@@ -145,11 +161,16 @@ class IntervalTimerFragment : Fragment() {
         modifier: Modifier,
         action: () -> Unit
     ) {
-        Icon(
-            vectorResource(id = iconRes),
-            modifier.clickable(onClick = action),
-            tint = purple700
-        )
+        IconButton(
+            onClick = { /*TODO*/ },
+            modifier = modifier
+        ) {
+            Icon(
+                vectorResource(id = iconRes),
+                tint = purple700
+            )
+        }
+
     }
 
     @Preview(showBackground = true)

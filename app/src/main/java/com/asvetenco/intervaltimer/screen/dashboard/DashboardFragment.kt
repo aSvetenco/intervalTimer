@@ -80,8 +80,7 @@ class DashboardFragment : Fragment() {
     @Composable
     fun TimerList(modifier: Modifier, workouts: List<Workout>) {
         LazyColumn(
-            modifier = modifier
-                .background(purple50)
+            modifier = modifier.background(purple50)
         ) {
             items(workouts) {
                 ItemExistingTimer(it)
@@ -92,8 +91,7 @@ class DashboardFragment : Fragment() {
     @Composable
     fun ItemExistingTimer(workout: Workout) {
         Column(
-            modifier = Modifier
-                .clickable(onClick = { showTimerFragment(workout) }),
+            modifier = Modifier.clickable(onClick = { showTimerFragment(workout) }),
             verticalArrangement = Arrangement.Center,
         ) {
             Row(Modifier.padding(top = 16.dp, bottom = 16.dp, end = 8.dp, start = 8.dp)) {

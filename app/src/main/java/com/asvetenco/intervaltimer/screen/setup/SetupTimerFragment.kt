@@ -22,7 +22,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import com.asvetenco.database.WorkoutProvider
 import com.asvetenco.intervaltimer.R
 import com.asvetenco.intervaltimer.data.TimeEvent
@@ -31,8 +30,6 @@ import com.asvetenco.intervaltimer.data.Workout
 import com.asvetenco.intervaltimer.ui.components.AppToolbar
 import com.asvetenco.intervaltimer.ui.theme.IntervalTimerTheme
 import com.asvetenco.intervaltimer.ui.theme.purple50
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 class SetupTimerFragment : Fragment() {
 
@@ -74,11 +71,6 @@ class SetupTimerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.retrieveTimerById(timerId)
-        lifecycleScope.launch {
-            viewModel.onWorkoutSaved.collect {
-                requireActivity().onBackPressed()
-            }
-        }
     }
 
     @Composable
@@ -111,7 +103,6 @@ class SetupTimerFragment : Fragment() {
             }
         }
     }
-
 
     @Composable
     fun ItemSetUp(event: TimeEvent, workout: Workout) {
