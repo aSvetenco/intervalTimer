@@ -1,4 +1,4 @@
-package com.asvetenco.intervaltimer.screen.timer
+package com.asvetenco.intervaltimer.screens.timer
 
 import android.content.Context
 import android.os.Bundle
@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.ConstraintLayout
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -20,11 +19,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -91,7 +91,8 @@ class IntervalTimerFragment : Fragment() {
         ) {
             val (closeIcon, timer, hint, controls) = createRefs()
             Icon(
-                vectorResource(id = R.drawable.ic_baseline_cancel_24),
+                contentDescription = null,
+                painter = painterResource(R.drawable.ic_baseline_cancel_24),
                 tint = purple700,
                 modifier = Modifier
                     .clickable(onClick = { viewModel.pauseWorkout() })
@@ -141,10 +142,11 @@ class IntervalTimerFragment : Fragment() {
             InteractiveIcon(R.drawable.ic_baseline_fast_rewind_24, Modifier.weight(1f)) {}
             IconButton(
                 { viewModel.startWorkout() },
-                Modifier.weight(2f),
+                Modifier.weight(2f)
             ) {
                 Icon(
-                    vectorResource(id = R.drawable.ic_baseline_play_arrow_24),
+                    painter = painterResource(id = R.drawable.ic_baseline_play_arrow_24),
+                    contentDescription = null,
                     tint = purple700
                 )
             }
@@ -166,7 +168,8 @@ class IntervalTimerFragment : Fragment() {
             modifier = modifier
         ) {
             Icon(
-                vectorResource(id = iconRes),
+                painterResource(id = iconRes),
+                contentDescription = null,
                 tint = purple700
             )
         }

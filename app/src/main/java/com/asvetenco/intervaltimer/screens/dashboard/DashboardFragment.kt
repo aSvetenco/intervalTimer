@@ -1,4 +1,4 @@
-package com.asvetenco.intervaltimer.screen.dashboard
+package com.asvetenco.intervaltimer.screens.dashboard
 
 import android.content.Context
 import android.os.Bundle
@@ -18,16 +18,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import com.asvetenco.database.WorkoutProvider
 import com.asvetenco.intervaltimer.R
 import com.asvetenco.intervaltimer.data.Workout
-import com.asvetenco.intervaltimer.screen.setup.SetupTimerFragment
-import com.asvetenco.intervaltimer.screen.timer.IntervalTimerFragment
+import com.asvetenco.intervaltimer.screens.setup.SetupTimerFragment
+import com.asvetenco.intervaltimer.screens.timer.IntervalTimerFragment
 import com.asvetenco.intervaltimer.ui.components.AppToolbar
 import com.asvetenco.intervaltimer.ui.theme.IntervalTimerTheme
 import com.asvetenco.intervaltimer.ui.theme.purple100
@@ -67,7 +67,7 @@ class DashboardFragment : Fragment() {
             topBar = {
                 AppToolbar(
                     stringResource(id = R.string.app_name),
-                    R.drawable.ic_baseline_add_24
+                    iconRes = R.drawable.ic_baseline_add_24
                 ) {
                     showSetUpFragment()
                 }
@@ -82,8 +82,8 @@ class DashboardFragment : Fragment() {
         LazyColumn(
             modifier = modifier.background(purple50)
         ) {
-            items(workouts) {
-                ItemExistingTimer(it)
+            items(workouts.size) {
+                ItemExistingTimer(workouts[it])
             }
         }
     }
@@ -97,7 +97,8 @@ class DashboardFragment : Fragment() {
             Row(Modifier.padding(top = 16.dp, bottom = 16.dp, end = 8.dp, start = 8.dp)) {
                 Icon(
                     modifier = Modifier.padding(start = 16.dp),
-                    imageVector = vectorResource(id = R.drawable.ic_baseline_sports_24),
+                    painter = painterResource(id = R.drawable.ic_baseline_sports_24),
+                    contentDescription = null,
                     tint = purple700
                 )
                 Text(
@@ -110,7 +111,8 @@ class DashboardFragment : Fragment() {
                     modifier = Modifier
                         .padding(end = 16.dp)
                         .clickable(onClick = { showSetUpFragment(workout) }),
-                    imageVector = vectorResource(id = R.drawable.ic_baseline_edit_24),
+                    painter = painterResource(id = R.drawable.ic_baseline_edit_24),
+                    contentDescription = null,
                     tint = purple700
                 )
             }
@@ -144,7 +146,7 @@ class DashboardFragment : Fragment() {
         parentFragmentManager.beginTransaction().apply {
             replace(
                 R.id.host_fragment,
-                SetupTimerFragment.newInstance(workout?.title, workout?.id),
+                SetupTimerFragment.newInstance(workout?.id),
                 SetupTimerFragment::class.java.simpleName
             )
             addToBackStack(SetupTimerFragment::class.java.simpleName)

@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.asvetenco.database.client.LocalTimerClient
 import com.asvetenco.intervaltimer.base.BaseViewModel
 import com.asvetenco.intervaltimer.data.TimeEventMapper
-import com.asvetenco.intervaltimer.screen.dashboard.DashboardViewModel
-import com.asvetenco.intervaltimer.screen.setup.SetupTimerViewModel
+import com.asvetenco.intervaltimer.screens.dashboard.DashboardViewModel
+import com.asvetenco.intervaltimer.screens.setup.SetupTimerViewModel
 
 class SetupViewModelFactory(
     private val dataSource: LocalTimerClient,

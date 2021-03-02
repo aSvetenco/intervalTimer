@@ -52,7 +52,6 @@ class CountdownService(
 
     private fun Int.toMilliSeconds() = (this.toLong()) * 1_000
 
-    private fun nextEvent(lapIndex: Int) = lapIndex + 1
 }
 
 interface CountdownClient : CountdownTimer.Listener {

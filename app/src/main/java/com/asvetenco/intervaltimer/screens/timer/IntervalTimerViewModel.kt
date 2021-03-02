@@ -1,4 +1,4 @@
-package com.asvetenco.intervaltimer.screen.timer
+package com.asvetenco.intervaltimer.screens.timer
 
 import com.asvetenco.database.client.LocalTimerClient
 import com.asvetenco.database.client.RoomNotFoundException

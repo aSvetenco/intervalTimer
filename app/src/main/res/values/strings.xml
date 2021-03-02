@@ -11,6 +11,7 @@
     <string name="set_up_timer_congrats">Congratulations!!!</string>
     <string name="set_up_timer_intervals">Intervals</string>
     <string name="set_up_timer_create_timer">Create Timer</string>
-
+    <string name="set_up_timer_enter_title">Enter timer title</string>
+    <string name="set_up_timer_was_saved">%s was saved</string>
 
 </resources>

@@ -1,4 +1,4 @@
-package com.asvetenco.intervaltimer.screen.setup
+package com.asvetenco.intervaltimer.screens.setup
 
 import com.asvetenco.database.client.LocalTimerClient
 import com.asvetenco.database.client.RoomNotFoundException
@@ -17,7 +17,8 @@ class SetupTimerViewModel(
     override val tag: String = SetupTimerViewModel::class.java.simpleName
 
     val workout = MutableStateFlow(Workout())
-    val onWorkoutSaved = MutableStateFlow(Unit)
+    val onWorkoutSaved = MutableStateFlow("")
+    val onWorkoutTitleEdited = MutableStateFlow("")
 
     fun retrieveTimerById(id: Long?) {
         if (id != null) {
@@ -38,7 +39,6 @@ class SetupTimerViewModel(
     }
 
     fun minus(event: TimeEvent, workout: Workout) {
-
         if (event.time > 0) {
             val laps = workout.events.map {
                 if (it.title == event.title) event.eventCopy(time = event.time - 1) else it
@@ -59,7 +59,48 @@ class SetupTimerViewModel(
     fun saveWorkout() {
         launchDataLoad {
             client.saveWorkout(listOf(mapper.mapToDto(workout.value)))
-            onWorkoutSaved.value = Unit
+            onWorkoutSaved.value = workout.value.title
         }
+    }
+
+    fun onWorkoutTitleEdited(value: String) {
+        val updated = workout.value.copy(title = value)
+        workout.value = updated
+    }
+
+    fun editExercises(event: TimeEvent, workout: Workout, count: String) {
+        val min = count.toIntOrNull() ?: 0
+        if (min <= 99) {
+            editValue(event, workout) { event.eventCopy(time = min) }
+        }
+    }
+
+    fun editMinutes(event: TimeEvent, workout: Workout, minutes: String) {
+        val min = minutes.toIntOrNull() ?: 0
+        if (min <= 99) {
+            editValue(event, workout) {
+                val time = event.seconds + 60 * min
+                event.eventCopy(time = time)
+            }
+        }
+    }
+
+    fun editSeconds(event: TimeEvent, workout: Workout, seconds: String) {
+        val sec = seconds.toIntOrNull() ?: 0
+        if (sec <= 99) {
+            editValue(event, workout) {
+                val time = event.minutes * 60 + sec
+                event.eventCopy(time = time)
+            }
+        }
+    }
+
+    private fun editValue(event: TimeEvent, workout: Workout, editEvent: () -> TimeEvent) {
+        val laps = workout.events.map {
+            if (it.title == event.title) {
+                editEvent()
+            } else it
+        }
+        this.workout.value = workout.copy(events = laps)
     }
 }
