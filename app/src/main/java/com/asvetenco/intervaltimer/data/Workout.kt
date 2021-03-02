@@ -1,6 +1,8 @@
 package com.asvetenco.intervaltimer.data
 
 import com.asvetenco.intervaltimer.R
+import com.asvetenco.intervaltimer.toMinutes
+import com.asvetenco.intervaltimer.toSeconds
 
 
 data class Workout(
@@ -28,110 +30,194 @@ data class Workout(
 sealed class TimeEvent(
     open val title: Int,
     open val time: Int,
-    open val phrase: Int
+    open val phrase: Int,
+    open val minutes: Int,
+    open val seconds: Int,
 ) {
 
     abstract fun eventCopy(
         title: Int = this.title,
         time: Int = this.time,
-        phrase: Int = this.phrase
+        phrase: Int = this.phrase,
+        minutes: Int = this.minutes,
+        seconds: Int = this.seconds,
     ): TimeEvent
 
     companion object {
-        fun warmUp(time: Int = 0) =
-            WarmUp(R.string.set_up_timer_warm_up, time, R.string.set_up_timer_warm_up)
 
-        fun coolDown(time: Int = 0) =
-            CoolDown(R.string.set_up_timer_cool_down, time, R.string.set_up_timer_warm_up)
+        fun warmUp(time: Int = 45) =
+            WarmUp(
+                R.string.set_up_timer_warm_up, time, R.string.set_up_timer_warm_up,
+                time.toMinutes(), time.toSeconds()
+            )
 
-        fun work(time: Int = 0) =
-            Work(R.string.set_up_timer_work, time, R.string.set_up_timer_work)
+        fun coolDown(time: Int = 45) =
+            CoolDown(
+                R.string.set_up_timer_cool_down, time, R.string.set_up_timer_warm_up,
+                time.toMinutes(), time.toSeconds()
+            )
 
-        fun rest(time: Int = 0) =
-            Rest(R.string.set_up_timer_rest, time, R.string.set_up_timer_rest)
+        fun work(time: Int = 25) =
+            Work(
+                R.string.set_up_timer_work, time, R.string.set_up_timer_work,
+                time.toMinutes(), time.toSeconds()
+            )
 
-        fun exercises(time: Int = 0) =
-            Exercise(R.string.set_up_timer_exercises, time, R.string.set_up_timer_exercises)
+        fun rest(time: Int = 10) =
+            Rest(
+                R.string.set_up_timer_rest, time, R.string.set_up_timer_rest,
+                time.toMinutes(), time.toSeconds()
+            )
 
-        fun congrats(time: Int = 0) =
-            Exercise(R.string.set_up_timer_congrats, time, R.string.set_up_timer_congrats)
+        fun exercises(time: Int = 1) =
+            Exercise(
+                R.string.set_up_timer_exercises, time, R.string.set_up_timer_exercises,
+                0, 0
+            )
+
+        fun congrats(time: Int = 1) =
+            Exercise(
+                R.string.set_up_timer_congrats, time, R.string.set_up_timer_congrats,
+                0, 0
+            )
     }
 }
 
 data class WarmUp(
     override val title: Int,
     override val time: Int,
-    override val phrase: Int
-) : TimeEvent(title, time, phrase) {
+    override val phrase: Int,
+    override val minutes: Int,
+    override val seconds: Int,
+) : TimeEvent(title, time, phrase, minutes, seconds) {
 
-    override fun eventCopy(title: Int, time: Int, phrase: Int): WarmUp = copy(
+    override fun eventCopy(
+        title: Int,
+        time: Int,
+        phrase: Int,
+        minutes: Int,
+        seconds: Int,
+    ) = WarmUp(
         title = title,
         time = time,
-        phrase = phrase
+        phrase = phrase,
+        minutes = time.toMinutes(),
+        seconds = time.toSeconds(),
     )
+
 }
 
 data class CoolDown(
     override val title: Int,
     override val time: Int,
-    override val phrase: Int
-) : TimeEvent(title, time, phrase) {
+    override val phrase: Int,
+    override val minutes: Int = 0,
+    override val seconds: Int = 0,
+) : TimeEvent(title, time, phrase, minutes, seconds) {
 
-    override fun eventCopy(title: Int, time: Int, phrase: Int): CoolDown = copy(
+    override fun eventCopy(
+        title: Int,
+        time: Int,
+        phrase: Int,
+        minutes: Int,
+        seconds: Int,
+    ) = CoolDown(
         title = title,
         time = time,
-        phrase = phrase
+        phrase = phrase,
+        minutes = time.toMinutes(),
+        seconds = time.toSeconds(),
     )
 }
 
 data class Work(
     override val title: Int,
     override val time: Int,
-    override val phrase: Int
-) : TimeEvent(title, time, phrase) {
+    override val phrase: Int,
+    override val minutes: Int,
+    override val seconds: Int,
+) : TimeEvent(title, time, phrase, minutes, seconds) {
 
-    override fun eventCopy(title: Int, time: Int, phrase: Int): Work = copy(
+    override fun eventCopy(
+        title: Int,
+        time: Int,
+        phrase: Int,
+        minutes: Int,
+        seconds: Int,
+    ) = Work(
         title = title,
         time = time,
-        phrase = phrase
+        phrase = phrase,
+        minutes = time.toMinutes(),
+        seconds = time.toSeconds(),
     )
 }
 
 data class Rest(
     override val title: Int,
     override val time: Int,
-    override val phrase: Int
-) : TimeEvent(title, time, phrase) {
+    override val phrase: Int,
+    override val minutes: Int,
+    override val seconds: Int,
+) : TimeEvent(title, time, phrase, minutes, seconds) {
 
-    override fun eventCopy(title: Int, time: Int, phrase: Int): Rest = copy(
+    override fun eventCopy(
+        title: Int,
+        time: Int,
+        phrase: Int,
+        minutes: Int,
+        seconds: Int,
+    ) = Rest(
         title = title,
         time = time,
-        phrase = phrase
+        phrase = phrase,
+        minutes = time.toMinutes(),
+        seconds = time.toSeconds(),
     )
 }
 
 data class Exercise(
     override val title: Int,
     override val time: Int,
-    override val phrase: Int
-) : TimeEvent(title, time, phrase) {
+    override val phrase: Int,
+    override val minutes: Int,
+    override val seconds: Int,
+) : TimeEvent(title, time, phrase, minutes, seconds) {
 
-    override fun eventCopy(title: Int, time: Int, phrase: Int): Exercise = copy(
+    override fun eventCopy(
+        title: Int,
+        time: Int,
+        phrase: Int,
+        minutes: Int,
+        seconds: Int,
+    ) = Exercise(
         title = title,
         time = time,
-        phrase = phrase
+        phrase = phrase,
+        minutes = time.toMinutes(),
+        seconds = time.toSeconds(),
     )
 }
 
 data class Congrats(
     override val title: Int,
     override val time: Int,
-    override val phrase: Int
-) : TimeEvent(title, time, phrase) {
+    override val phrase: Int,
+    override val minutes: Int,
+    override val seconds: Int,
+) : TimeEvent(title, time, phrase, minutes, seconds) {
 
-    override fun eventCopy(title: Int, time: Int, phrase: Int): Congrats = copy(
+    override fun eventCopy(
+        title: Int,
+        time: Int,
+        phrase: Int,
+        minutes: Int,
+        seconds: Int,
+    ) = Congrats(
         title = title,
         time = time,
-        phrase = phrase
+        phrase = phrase,
+        minutes = time.toMinutes(),
+        seconds = time.toSeconds(),
     )
 }

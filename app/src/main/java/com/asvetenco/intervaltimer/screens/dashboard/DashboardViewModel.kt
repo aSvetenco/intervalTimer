@@ -1,4 +1,4 @@
-package com.asvetenco.intervaltimer.screen.dashboard
+package com.asvetenco.intervaltimer.screens.dashboard
 
 import com.asvetenco.database.client.LocalTimerClient
 import com.asvetenco.database.dto.LapDto
