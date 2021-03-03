@@ -4,12 +4,16 @@ import com.asvetenco.database.client.LocalTimerClient
 import com.asvetenco.database.dto.LapDto
 import com.asvetenco.database.dto.WorkoutDto
 import com.asvetenco.intervaltimer.base.BaseViewModel
+import com.asvetenco.intervaltimer.data.TimeEventMapper
 import com.asvetenco.intervaltimer.data.Workout
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlin.random.Random
 
-class DashboardViewModel(private val client: LocalTimerClient) : BaseViewModel() {
+class DashboardViewModel(
+    private val client: LocalTimerClient,
+    private val mapper: TimeEventMapper
+) : BaseViewModel() {
 
     override val tag: String = DashboardViewModel::class.java.canonicalName ?: "DashboardViewModel"
 
@@ -31,6 +35,12 @@ class DashboardViewModel(private val client: LocalTimerClient) : BaseViewModel()
             }
         }
 
+    }
+
+    fun deleteWorkout(workout: Workout) {
+        launchDataLoad {
+            client.deleteWorkout(mapper.mapToDto(workout))
+        }
     }
 
     fun fillDb() {

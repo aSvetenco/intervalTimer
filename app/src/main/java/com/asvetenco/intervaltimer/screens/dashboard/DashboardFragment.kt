@@ -5,8 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.runtime.getValue
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,7 +18,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
@@ -25,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import com.asvetenco.database.WorkoutProvider
 import com.asvetenco.intervaltimer.R
+import com.asvetenco.intervaltimer.data.TimeEventMapper
 import com.asvetenco.intervaltimer.data.Workout
 import com.asvetenco.intervaltimer.screens.setup.SetupTimerFragment
 import com.asvetenco.intervaltimer.screens.timer.IntervalTimerFragment
@@ -34,6 +37,7 @@ import com.asvetenco.intervaltimer.ui.theme.purple100
 import com.asvetenco.intervaltimer.ui.theme.purple50
 import com.asvetenco.intervaltimer.ui.theme.purple700
 
+@ExperimentalFoundationApi
 class DashboardFragment : Fragment() {
 
     private lateinit var viewModel: DashboardViewModel
@@ -41,7 +45,7 @@ class DashboardFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         val client = WorkoutProvider(context.applicationContext).localTimerClient()
-        viewModel = DashboardViewModel(client)
+        viewModel = DashboardViewModel(client, TimeEventMapper())
         viewModel.retrieveWorkouts()
     }
 
@@ -88,10 +92,16 @@ class DashboardFragment : Fragment() {
         }
     }
 
+    @ExperimentalFoundationApi
     @Composable
     fun ItemExistingTimer(workout: Workout) {
         Column(
-            modifier = Modifier.clickable(onClick = { showTimerFragment(workout) }),
+            modifier = Modifier
+                .combinedClickable(
+                    onClick = { showTimerFragment(workout) },
+                    //TODO and alert - You want to remove workout?
+                    onLongClick = { viewModel.deleteWorkout(workout) }
+                ),
             verticalArrangement = Arrangement.Center,
         ) {
             Row(Modifier.padding(top = 16.dp, bottom = 16.dp, end = 8.dp, start = 8.dp)) {

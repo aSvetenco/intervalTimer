@@ -11,6 +11,7 @@ interface LocalTimerClient {
     fun getAllWorkouts(): Flow<List<WorkoutDto>>
     fun getWorkoutById(id: Long): Flow<WorkoutDto>
     suspend fun saveWorkout(workouts: List<WorkoutDto>)
+    suspend fun deleteWorkout(workout: WorkoutDto)
 }
 
 internal class LocalTimerDataSource(
@@ -28,6 +29,10 @@ internal class LocalTimerDataSource(
 
     override suspend fun saveWorkout(workouts: List<WorkoutDto>) {
         dao.saveWorkouts(workouts.map { mapper.mapToEntity(it) })
+    }
+
+    override suspend fun deleteWorkout(workout: WorkoutDto) {
+        dao.deleteWorkout(mapper.mapToEntity(workout))
     }
 }
 

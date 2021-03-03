@@ -23,7 +23,8 @@ class SetupViewModelFactory(
 }
 
 class DashboardViewModelFactory(
-    private val dataSource: LocalTimerClient
+    private val dataSource: LocalTimerClient,
+    private val mapper: TimeEventMapper
 ) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
@@ -31,6 +32,6 @@ class DashboardViewModelFactory(
         if (modelClass != BaseViewModel::class.java) {
             throw IllegalArgumentException("Unknown ViewModel class")
         }
-        return DashboardViewModel(dataSource) as T
+        return DashboardViewModel(dataSource, mapper) as T
     }
 }

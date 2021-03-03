@@ -1,9 +1,6 @@
 package com.asvetenco.database.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.asvetenco.database.entity.WorkoutEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -19,5 +16,8 @@ internal interface WorkoutDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveWorkouts(timers: List<WorkoutEntity>)
+
+    @Delete
+    suspend fun deleteWorkout(workout: WorkoutEntity)
 
 }

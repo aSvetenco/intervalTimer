@@ -11,6 +11,6 @@ class DependenciesContainer(app: Application) {
 
     fun setupTimerVMFactory(): ViewModelProvider.Factory = SetupViewModelFactory(dataSource, TimeEventMapper())
 
-    fun dashboardVMFactory(): ViewModelProvider.Factory = DashboardViewModelFactory(dataSource)
+    fun dashboardVMFactory(): ViewModelProvider.Factory = DashboardViewModelFactory(dataSource, TimeEventMapper())
 }
 
