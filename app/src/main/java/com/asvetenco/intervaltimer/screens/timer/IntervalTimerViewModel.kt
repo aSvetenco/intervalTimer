@@ -31,7 +31,7 @@ class IntervalTimerViewModel(
                 },
                 block = {
                     client.getWorkoutById(id).collect { workoutDto ->
-                        workout.value = dtoMapper.mapFromDto(workoutDto)
+                        countdownClient.prepareWorkout(dtoMapper.mapFromDto(workoutDto))
                     }
                 })
         } else {
@@ -40,7 +40,7 @@ class IntervalTimerViewModel(
     }
 
     fun startWorkout() {
-        countdownClient.executeWorkout(workout.value)
+        countdownClient.executeWorkout()
     }
 
     fun pauseWorkout() {

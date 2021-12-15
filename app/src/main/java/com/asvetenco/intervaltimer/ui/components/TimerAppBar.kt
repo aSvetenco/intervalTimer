@@ -11,7 +11,6 @@ import androidx.compose.ui.unit.dp
 import com.asvetenco.intervaltimer.ui.theme.purple50
 import com.asvetenco.intervaltimer.ui.theme.purple700
 
-
 @Composable
 fun AppToolbar(
     titleText: String = "",

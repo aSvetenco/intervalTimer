@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.runtime.getValue
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
@@ -37,7 +37,6 @@ import com.asvetenco.intervaltimer.ui.theme.purple100
 import com.asvetenco.intervaltimer.ui.theme.purple50
 import com.asvetenco.intervaltimer.ui.theme.purple700
 
-@ExperimentalFoundationApi
 class DashboardFragment : Fragment() {
 
     private lateinit var viewModel: DashboardViewModel
@@ -92,7 +91,7 @@ class DashboardFragment : Fragment() {
         }
     }
 
-    @ExperimentalFoundationApi
+    @OptIn(ExperimentalFoundationApi::class)
     @Composable
     fun ItemExistingTimer(workout: Workout) {
         Column(
