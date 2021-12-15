@@ -37,5 +37,4 @@ internal class LocalTimerDataSource(
 }
 
 
-class RoomNotFoundException(message: String) : RuntimeException(message) {
-}
+class RoomNotFoundException(message: String) : RuntimeException(message)

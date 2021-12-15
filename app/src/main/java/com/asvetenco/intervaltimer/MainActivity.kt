@@ -3,7 +3,6 @@ package com.asvetenco.intervaltimer
 import android.os.Bundle
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomAppBar
@@ -20,7 +19,6 @@ import com.asvetenco.intervaltimer.ui.theme.purple700
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
-    @ExperimentalFoundationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setBottomBar()

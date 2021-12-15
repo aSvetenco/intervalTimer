@@ -221,3 +221,21 @@ data class Congrats(
         seconds = time.toSeconds(),
     )
 }
+
+class TimeEventComparator : Comparator<TimeEvent> {
+    override fun compare(o1: TimeEvent, o2: TimeEvent): Int {
+        return when {
+            o1 is WarmUp -> -1
+            o2 is WarmUp -> 1
+            o1 is Work -> -1
+            o2 is Work -> 1
+            o1 is Rest -> -1
+            o2 is Rest -> 1
+            o1 is CoolDown -> -1
+            o2 is CoolDown -> 1
+            else -> 1
+        }
+    }
+
+
+}

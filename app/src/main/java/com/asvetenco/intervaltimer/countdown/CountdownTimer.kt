@@ -12,23 +12,17 @@ class CountdownTimer {
         this.listener = listener
     }
 
-    fun start(coroutineScope: CoroutineScope, time: Long, tickPeriod: Long = 1_000) {
+    fun start(
+        coroutineScope: CoroutineScope,
+        time: Long,
+        tickPeriod: Long = 1_000,
+        startDelay: Long = 0
+    ) {
         if (timerJob?.isActive == true) stop()
         timerJob = coroutineScope.launch {
             withContext(Dispatchers.Default) {
-                createCountdownTimer(time, 0, tickPeriod)
-            }
-        }
-    }
-
-
-    fun start(coroutineScope: CoroutineScope, times: List<Long>, tickPeriod: Long = 1_000) {
-        if (timerJob?.isActive == true) stop()
-        timerJob = coroutineScope.launch {
-            withContext(Dispatchers.Default) {
-                times.forEachIndexed { index, time ->
-                    createCountdownTimer(time, index, tickPeriod)
-                }
+                delay(startDelay)
+                createCountdownTimer(time,  tickPeriod)
             }
         }
     }
@@ -37,19 +31,19 @@ class CountdownTimer {
         timerJob?.cancel()
     }
 
-    private suspend fun createCountdownTimer(time: Long, lapIndex: Int, tickPeriod: Long) {
+    private suspend fun createCountdownTimer(time: Long,  tickPeriod: Long) {
         var delta = time
         while (delta > tickPeriod) {
             delta -= tickPeriod
             delay(tickPeriod)
             listener?.onTick(delta)
         }
-        listener?.onFinish(lapIndex)
+        listener?.onFinish()
     }
 
     interface Listener {
         @WorkerThread
-        suspend fun onFinish(lapIndex: Int)
+        suspend fun onFinish()
 
         @WorkerThread
         suspend fun onTick(remainingTime: Long)
